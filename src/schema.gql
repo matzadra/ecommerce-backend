@@ -2,7 +2,37 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Product {
+  id: Int!
+  name: String!
+  price: Float!
+  stock: Int!
+  categoryId: Int!
+}
+
 type Query {
   sayHello: String!
   getUser: String!
+  getAllProducts: [Product!]!
+}
+
+type Mutation {
+  createProduct(data: CreateProductInput!): Product!
+  updateProduct(data: UpdateProductInput!): Product!
+  deleteProduct(id: Int!): Boolean!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Float!
+  stock: Int!
+  categoryId: Int!
+}
+
+input UpdateProductInput {
+  name: String
+  price: Float
+  stock: Int
+  categoryId: Int
+  id: Int!
 }

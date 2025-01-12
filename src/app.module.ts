@@ -6,6 +6,7 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppResolver } from './app.resolver';
+import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
@@ -21,6 +22,7 @@ import { OrdersModule } from './modules/orders/orders.module';
     ProductsModule,
     CategoriesModule,
     OrdersModule,
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppResolver],
