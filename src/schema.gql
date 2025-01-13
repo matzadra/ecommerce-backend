@@ -18,18 +18,30 @@ type Category {
 
 type Query {
   sayHello: String!
-  getUser: String!
   getAllProducts: [Product!]!
   getAllCategories: [Category!]!
 }
 
 type Mutation {
+  register(data: RegisterUserInput!): String!
+  login(data: LoginUserInput!): String!
   createProduct(data: CreateProductInput!): Product!
   updateProduct(data: UpdateProductInput!): Product!
   deleteProduct(id: Int!): Boolean!
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput!): Category!
   deleteCategory(id: Int!): Boolean!
+}
+
+input RegisterUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
 }
 
 input CreateProductInput {
