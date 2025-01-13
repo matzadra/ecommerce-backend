@@ -1,4 +1,5 @@
 import { InputType, Field, Float, Int } from '@nestjs/graphql';
+import { ProductVariationInput } from './product-variation.input';
 
 @InputType()
 export class CreateProductInput {
@@ -13,4 +14,7 @@ export class CreateProductInput {
 
   @Field(() => Int)
   categoryId: number;
+
+  @Field(() => [ProductVariationInput], { nullable: true })
+  variations?: ProductVariationInput[];
 }

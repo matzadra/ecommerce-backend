@@ -1,12 +1,15 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
-import { ProductVariation } from './product-variation.model';
+
 @ObjectType()
-export class Product {
+export class ProductVariation {
   @Field(() => Int)
   id: number;
 
   @Field()
-  name: string;
+  color: string;
+
+  @Field()
+  size: string;
 
   @Field(() => Float)
   price: number;
@@ -15,8 +18,5 @@ export class Product {
   stock: number;
 
   @Field(() => Int)
-  categoryId: number;
-
-  @Field(() => [ProductVariation], { nullable: true })
-  variations?: ProductVariation[];
+  productId: number;
 }

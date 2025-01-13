@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { UserService } from './services/user.service';
 import { UsersResolver } from './resolvers/user.resolver';
 import { PrismaService } from '../../prisma/prisma.service';
+import { JwtStrategy } from '../../auth/strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { PrismaService } from '../../prisma/prisma.service';
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  providers: [UserService, UsersResolver, PrismaService],
+  providers: [UserService, UsersResolver, PrismaService, JwtStrategy],
 })
 export class UsersModule {}
