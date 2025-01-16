@@ -13,16 +13,24 @@ export class ProductService {
     });
   }
 
+  async findById(id: number) {
+    return this.prisma.product.findUnique({
+      where: { id },
+      include: { variations: true },
+    });
+  }
+
   async create(data: CreateProductInput) {
     return this.prisma.product.create({
       data: {
-        ...data,
+        name: data.name,
+        categoryId: data.categoryId,
         variations: {
-          create: data.variations.map((variation) => ({
+          create: data.variations?.map((variation) => ({
             color: variation.color,
-            size: variation.size,
             price: variation.price,
             stock: variation.stock,
+            images: variation.images ?? [],
           })),
         },
       },
@@ -33,9 +41,10 @@ export class ProductService {
   async update(data: UpdateProductInput) {
     const { variations, ...productData } = data;
 
-    await this.prisma.product.update({
+    const updatedProduct = await this.prisma.product.update({
       where: { id: data.id },
       data: productData,
+      include: { variations: true },
     });
 
     if (variations) {
@@ -44,16 +53,19 @@ export class ProductService {
           await this.prisma.productVariation.update({
             where: { id: variation.id },
             data: {
-              color: variation.color,
-              size: variation.size,
-              price: variation.price,
-              stock: variation.stock,
+              ...(variation.color && { color: variation.color }),
+              ...(variation.price && { price: variation.price }),
+              ...(variation.stock && { stock: variation.stock }),
+              ...(variation.images && { images: variation.images }),
             },
           });
         } else {
           await this.prisma.productVariation.create({
             data: {
-              ...variation,
+              color: variation.color ?? 'Default Color',
+              price: variation.price ?? 0,
+              stock: variation.stock ?? 0,
+              images: variation.images ?? [],
               productId: data.id,
             },
           });
@@ -61,10 +73,7 @@ export class ProductService {
       }
     }
 
-    return this.prisma.product.findUnique({
-      where: { id: data.id },
-      include: { variations: true },
-    });
+    return updatedProduct;
   }
 
   async delete(id: number) {

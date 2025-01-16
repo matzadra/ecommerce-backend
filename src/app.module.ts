@@ -11,7 +11,7 @@ import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { OrdersModule } from './modules/orders/orders.module';
-
+import { ThemeConfigModule } from './modules/theme-config/theme-config.module';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -23,6 +23,7 @@ import { OrdersModule } from './modules/orders/orders.module';
     CategoriesModule,
     OrdersModule,
     PrismaModule,
+    ThemeConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppResolver],

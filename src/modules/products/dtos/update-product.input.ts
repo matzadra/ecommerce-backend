@@ -9,4 +9,7 @@ export class UpdateProductInput extends PartialType(CreateProductInput) {
 
   @Field(() => [ProductVariationInput], { nullable: true })
   variations?: ProductVariationInput[];
+
+  @Field(() => [String], { nullable: true })
+  images?: string[];
 }

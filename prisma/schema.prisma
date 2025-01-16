@@ -16,26 +16,29 @@ model User {
 }
 
 model Product {
-  id         Int      @id @default(autoincrement())
-  name       String
-  price      Float
-  stock      Int
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
-  variations ProductVariation[]
-  orders     Order[]   @relation("ProductOrders")
+  id          Int                @id @default(autoincrement())
+  name        String             
+  description String?            
+  category    Category           @relation(fields: [categoryId], references: [id])
+  categoryId  Int                
+  variations  ProductVariation[] 
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
 }
 
 model ProductVariation {
-  id         Int      @id @default(autoincrement())
-  color      String
-  size       String
-  price      Float
-  stock      Int
-  product    Product  @relation(fields: [productId], references: [id])
-  productId  Int
-  createdAt  DateTime @default(now())
+  id          Int            @id @default(autoincrement())
+  productId   Int            
+  product     Product        @relation(fields: [productId], references: [id])
+  color       String                
+  price       Float          
+  stock       Int  
+  images      String[]           
+  orderItems  OrderProduct[] 
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }
+
 
 model Category {
   id       Int       @id @default(autoincrement())
@@ -44,11 +47,43 @@ model Category {
 }
 
 model Order {
-  id        Int     @id @default(autoincrement())
-  user      User    @relation(fields: [userId], references: [id])
+  id        Int            @id @default(autoincrement())
+  user      User           @relation(fields: [userId], references: [id])
   userId    Int
-  products  Product[] @relation("ProductOrders")
-  total     Float
-  createdAt DateTime  @default(now())
+  products  OrderProduct[] 
+  total     Float 
+  createdAt DateTime       @default(now())
 }
+
+model OrderProduct {
+  id                Int              @id @default(autoincrement())
+  order             Order            @relation(fields: [orderId], references: [id])
+  orderId           Int
+  productVariation  ProductVariation @relation(fields: [productVariationId], references: [id])
+  productVariationId Int             
+  quantity          Int
+  price             Float            
+}
+
+model ThemeConfig {
+  id              Int      @id @default(autoincrement())
+  themeName       String   @unique
+  primaryColor    String  
+  backgroundColor String   
+  secondaryColor  String   
+  accentColor     String   
+  textColor       String   
+  borderColor     String   
+  shadow          String   
+  titleFont       String   
+  bodyFont        String   
+  descFont        String   
+  spacingUnit     String   
+  borderRadius    String   
+  width           String   
+  height          String   
+  customSpacing   String   
+  customClass     String   
+}
+
 

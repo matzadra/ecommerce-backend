@@ -3,17 +3,17 @@ import { InputType, Field, Float, Int } from '@nestjs/graphql';
 @InputType()
 export class ProductVariationInput {
   @Field(() => Int, { nullable: true })
-  id?: number; //
+  id?: number;
 
-  @Field()
-  color: string;
+  @Field({ nullable: true })
+  color?: string;
 
-  @Field()
-  size: string;
+  @Field(() => Float, { nullable: true })
+  price?: number;
 
-  @Field(() => Float)
-  price: number;
+  @Field(() => Int, { nullable: true })
+  stock?: number;
 
-  @Field(() => Int)
-  stock: number;
+  @Field(() => [String], { nullable: true })
+  images?: string[];
 }
