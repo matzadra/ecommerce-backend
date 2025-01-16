@@ -8,9 +8,6 @@ export class ProductVariation {
   @Field()
   color: string;
 
-  @Field()
-  size: string;
-
   @Field(() => Float)
   price: number;
 
@@ -19,4 +16,7 @@ export class ProductVariation {
 
   @Field(() => Int)
   productId: number;
+
+  @Field(() => [String], { nullable: true })
+  images?: string[];
 }

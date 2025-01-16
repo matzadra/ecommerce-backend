@@ -8,56 +8,47 @@ export class OrderService {
 
   async findAll() {
     return this.prisma.order.findMany({
-      include: { products: true },
+      include: {
+        products: {
+          include: {
+            productVariation: true,
+          },
+        },
+      },
     });
   }
 
   async create(data: CreateOrderInput) {
-    const { productIds, variationIds, userId } = data;
+    const { variationIds, userId } = data;
 
-    // Calcula o total do pedido com base nas variações e produtos
-    let total = 0;
+    const variations = await this.prisma.productVariation.findMany({
+      where: { id: { in: variationIds } },
+    });
 
-    if (variationIds && variationIds.length > 0) {
-      const variations = await this.prisma.productVariation.findMany({
-        where: { id: { in: variationIds } },
-      });
-
-      total += variations.reduce((sum, variation) => sum + variation.price, 0);
-
-      // Atualiza o estoque das variações
-      for (const variationId of variationIds) {
-        await this.prisma.productVariation.update({
-          where: { id: variationId },
-          data: { stock: { decrement: 1 } },
-        });
-      }
-    }
-
-    if (productIds && productIds.length > 0) {
-      const products = await this.prisma.product.findMany({
-        where: { id: { in: productIds } },
-      });
-
-      total += products.reduce((sum, product) => sum + product.price, 0);
-
-      for (const productId of productIds) {
-        await this.prisma.product.update({
-          where: { id: productId },
-          data: { stock: { decrement: 1 } },
-        });
-      }
-    }
+    const total = variations.reduce(
+      (sum, variation) => sum + variation.price,
+      0,
+    );
 
     return this.prisma.order.create({
       data: {
         userId,
         total,
         products: {
-          connect: productIds?.map((id) => ({ id })) || [],
+          create: variationIds.map((id) => ({
+            productVariationId: id,
+            price: variations.find((v) => v.id === id).price,
+            quantity: 1,
+          })),
         },
       },
-      include: { products: true },
+      include: {
+        products: {
+          include: {
+            productVariation: true,
+          },
+        },
+      },
     });
   }
 }

@@ -5,9 +5,6 @@ export class CreateOrderInput {
   @Field(() => Int)
   userId: number;
 
-  @Field(() => [Int], { nullable: true })
-  productIds?: number[];
-
-  @Field(() => [Int], { nullable: true })
-  variationIds?: number[];
+  @Field(() => [Int])
+  variationIds: number[];
 }

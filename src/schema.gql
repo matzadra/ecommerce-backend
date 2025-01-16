@@ -5,19 +5,18 @@
 type ProductVariation {
   id: Int!
   color: String!
-  size: String!
   price: Float!
   stock: Int!
   productId: Int!
+  images: [String!]
 }
 
 type Product {
   id: Int!
   name: String!
-  price: Float!
-  stock: Int!
   categoryId: Int!
   variations: [ProductVariation!]
+  images: [String!]
 }
 
 type Category {
@@ -26,10 +25,17 @@ type Category {
   products: [Product!]
 }
 
+type OrderProduct {
+  id: Int!
+  productVariation: ProductVariation!
+  quantity: Int!
+  price: Float!
+}
+
 type Order {
   id: Int!
   userId: Int!
-  products: [Product!]!
+  products: [OrderProduct!]!
   total: Float!
   createdAt: DateTime!
 }
@@ -39,11 +45,35 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type ThemeConfig {
+  id: Int!
+  themeName: String!
+  primaryColor: String!
+  backgroundColor: String!
+  secondaryColor: String!
+  accentColor: String!
+  textColor: String!
+  borderColor: String!
+  shadow: String!
+  titleFont: String!
+  bodyFont: String!
+  descFont: String!
+  spacingUnit: String!
+  borderRadius: String!
+  width: String!
+  height: String!
+  customSpacing: String!
+  customClass: String!
+}
+
 type Query {
   sayHello: String!
   getAllProducts: [Product!]!
+  getProductById(id: Int!): Product
   getAllCategories: [Category!]!
   getAllOrders: [Order!]!
+  getAllThemes: [ThemeConfig!]!
+  getThemeById(id: Int!): ThemeConfig
 }
 
 type Mutation {
@@ -56,6 +86,9 @@ type Mutation {
   updateCategory(data: UpdateCategoryInput!): Category!
   deleteCategory(id: Int!): Boolean!
   createOrder(data: CreateOrderInput!): Order!
+  createTheme(data: CreateThemeConfigInput!): ThemeConfig!
+  updateTheme(data: UpdateThemeConfigInput!): ThemeConfig!
+  deleteTheme(id: Int!): Boolean!
 }
 
 input RegisterUserInput {
@@ -71,27 +104,24 @@ input LoginUserInput {
 
 input CreateProductInput {
   name: String!
-  price: Float!
-  stock: Int!
   categoryId: Int!
   variations: [ProductVariationInput!]
 }
 
 input ProductVariationInput {
   id: Int
-  color: String!
-  size: String!
-  price: Float!
-  stock: Int!
+  color: String
+  price: Float
+  stock: Int
+  images: [String!]
 }
 
 input UpdateProductInput {
   name: String
-  price: Float
-  stock: Int
   categoryId: Int
   variations: [ProductVariationInput!]
   id: Int!
+  images: [String!]
 }
 
 input CreateCategoryInput {
@@ -105,6 +135,46 @@ input UpdateCategoryInput {
 
 input CreateOrderInput {
   userId: Int!
-  productIds: [Int!]
-  variationIds: [Int!]
+  variationIds: [Int!]!
+}
+
+input CreateThemeConfigInput {
+  themeName: String!
+  primaryColor: String!
+  backgroundColor: String!
+  secondaryColor: String!
+  accentColor: String!
+  textColor: String!
+  borderColor: String!
+  shadow: String!
+  titleFont: String!
+  bodyFont: String!
+  descFont: String!
+  spacingUnit: String!
+  borderRadius: String!
+  width: String!
+  height: String!
+  customSpacing: String!
+  customClass: String!
+}
+
+input UpdateThemeConfigInput {
+  themeName: String
+  primaryColor: String
+  backgroundColor: String
+  secondaryColor: String
+  accentColor: String
+  textColor: String
+  borderColor: String
+  shadow: String
+  titleFont: String
+  bodyFont: String
+  descFont: String
+  spacingUnit: String
+  borderRadius: String
+  width: String
+  height: String
+  customSpacing: String
+  customClass: String
+  id: Int!
 }
